@@ -258,7 +258,12 @@ function drawBar(i, barW, barH, h){
 }
 
 function drawLiveBars(){
-  analyser.getByteFrequencyData(dataArray);
+  try {
+    analyser.getByteFrequencyData(dataArray);
+  } catch (err) {
+    drawIdleBars(performance.now());
+    return;
+  }
   const w = canvas.width, h = canvas.height;
   ctx.clearRect(0, 0, w, h);
   const barW = w / BAR_COUNT;
@@ -280,9 +285,51 @@ function visualizerLoop(t){
 }
 
 function startVisualizer(){
-  setupAudioGraph();
-  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  try {
+    setupAudioGraph();
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  } catch (err) {
+    /* Visualizer is purely decorative — never let it interfere with playback. */
+  }
 }
 
 /* Idle animation runs immediately so the visualizer never looks dead/broken */
 visualizerLoop(0);
+
+/* ---------- Lightbox for memory photos ---------- */
+(function initLightbox(){
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxCaption = document.getElementById('lightboxCaption');
+  const closeBtn = document.getElementById('lightboxClose');
+
+  function openLightbox(photoEl){
+    if (photoEl.classList.contains('img-missing')) return; // no real photo yet
+    const img = photoEl.querySelector('img');
+    const caption = photoEl.closest('.memory-card')?.querySelector('h3')?.textContent || '';
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt;
+    lightboxCaption.textContent = caption;
+    lightbox.classList.add('active');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox(){
+    lightbox.classList.remove('active');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.memory-photo').forEach((photo) => {
+    photo.addEventListener('click', () => openLightbox(photo));
+  });
+
+  closeBtn.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+})();
