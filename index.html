@@ -101,7 +101,6 @@
               </div>
             </div>
           </div>
-          <p class="piano-hint">(mp3 placeholder — swap in <code>assets/piano.mp3</code>)</p>
         </div>
       </div>
     </section>
@@ -119,12 +118,12 @@
 
           <article class="memory-card" data-reveal data-tilt>
             <div class="memory-photo placeholder-photo">
-              <img src="assets/memory1.jpg" alt="The Roblox coffee shop" onerror="this.parentElement.classList.add('img-missing')">
-              <span class="photo-fallback">☕</span>
+              <img src="assets/memory1.jpg" alt="Rosa Pizza" onerror="this.parentElement.classList.add('img-missing')">
+              <span class="photo-fallback">🍕</span>
             </div>
             <div class="memory-text">
-              <span class="memory-icon">☕</span>
-              <h3>The Roblox coffee shop</h3>
+              <span class="memory-icon">🍕</span>
+              <h3>Rosa Pizza</h3>
               <p>Where a very serious business was run, entirely without a business license.</p>
             </div>
           </article>
@@ -143,12 +142,12 @@
 
           <article class="memory-card" data-reveal data-tilt>
             <div class="memory-photo placeholder-photo">
-              <img src="assets/tulip.png" alt="Tulips" onerror="this.parentElement.classList.add('img-missing')">
+              <img src="assets/lilies.png" alt="Lilies" onerror="this.parentElement.classList.add('img-missing')">
               <span class="photo-fallback">🌷</span>
             </div>
             <div class="memory-text">
               <span class="memory-icon">🌷</span>
-              <h3>Tulips</h3>
+              <h3>Lilies</h3>
               <p>Your favourite, apparently. Consider this whole page a bouquet.</p>
             </div>
           </article>
@@ -239,6 +238,13 @@
     </section>
 
   </main>
+
+  <!-- Lightbox for viewing memory photos larger -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    <p class="lightbox-caption" id="lightboxCaption"></p>
+  </div>
 
   <script src="script.js"></script>
 </body>
