@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Sya 🤍</title>
+
+<!-- Fonts: Playfair Display (elegant serif), Caveat (handwritten notes), Nunito Sans (soft body text) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,500&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Scroll progress bar -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- Soft glow that follows the cursor (desktop only, see JS) -->
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+  <!-- Ambient floating petals canvas, sits behind everything -->
+  <div class="petal-field" id="petalField" aria-hidden="true"></div>
+
+  <!-- subtle animated gradient wash, slowly drifting -->
+  <div class="ambient-wash" aria-hidden="true"></div>
+
+  <!-- subtle paper grain overlay for the whole page -->
+  <div class="paper-grain" aria-hidden="true"></div>
+
+  <!-- ============ OPENING SCREEN ============ -->
+  <section id="opening" class="screen opening">
+    <div class="blob blob-pink" data-depth="0.15"></div>
+    <div class="blob blob-gold" data-depth="0.3"></div>
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+
+    <div class="opening-inner" id="openingInner">
+      <p class="eyebrow reveal-up" style="--d:0">a little something for</p>
+      <h1 class="opening-title" id="openingTitle" aria-label="For Sya"></h1>
+
+      <p class="opening-note reveal-up" style="--d:5">
+        You once told me you wanted to hear me play the piano.<br>
+        So I made something.
+      </p>
+
+      <button id="enterBtn" class="enter-btn reveal-up" style="--d:6">
+        <span class="tulip-icon">🌷</span>
+        <span>Enter</span>
+      </button>
+    </div>
+    <div class="opening-vignette"></div>
+    <div class="scroll-hint" aria-hidden="true"><span></span></div>
+  </section>
+
+  <!-- ============ MAIN CONTENT (hidden until Enter is pressed) ============ -->
+  <main id="mainContent" class="main-content" aria-hidden="true">
+
+    <!-- ============ PIANO SECTION ============ -->
+    <section id="piano" class="screen piano-section">
+      <div class="blob blob-blush" data-depth="0.2"></div>
+      <div class="cloud cloud-3"></div>
+
+      <div class="section-inner" data-reveal-section>
+        <p class="eyebrow">for you, from the keys</p>
+        <h2 class="section-title">I hope this makes your day<br>a little brighter.</h2>
+
+        <div class="piano-card glass-card" id="pianoCard">
+          <div class="piano-card-top">
+            <span class="piano-emoji">🎹</span>
+            <div class="piano-card-labels">
+              <p class="piano-track-title">a small piece, played for Sya</p>
+              <p class="piano-track-sub">recorded on an ordinary evening</p>
+            </div>
+          </div>
+
+          <!-- Live visualizer, reacts to playback -->
+          <canvas id="visualizer" class="visualizer" width="480" height="70" aria-hidden="true"></canvas>
+
+          <!-- Custom audio player -->
+          <audio id="audio" preload="metadata" loop>
+            <source src="assets/piano.mp3" type="audio/mpeg">
+          </audio>
+
+          <div class="player">
+            <button id="playBtn" class="play-btn" aria-label="Play">
+              <svg id="iconPlay" class="play-icon is-visible" viewBox="0 0 24 24" width="20" height="20"><polygon points="6,4 20,12 6,20" fill="currentColor"/></svg>
+              <svg id="iconPause" class="play-icon" viewBox="0 0 24 24" width="20" height="20"><rect x="5" y="4" width="4" height="16" fill="currentColor"/><rect x="15" y="4" width="4" height="16" fill="currentColor"/></svg>
+            </button>
+
+            <div class="player-body">
+              <div class="progress-row">
+                <span id="curTime" class="time">0:00</span>
+                <input type="range" id="seek" class="seek" value="0" min="0" max="100" step="0.1" aria-label="Seek">
+                <span id="durTime" class="time">0:00</span>
+              </div>
+              <div class="volume-row">
+                <span class="vol-icon">🔈</span>
+                <input type="range" id="volume" class="volume" value="70" min="0" max="100" aria-label="Volume">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MEMORY TIMELINE ============ -->
+    <section id="timeline" class="screen timeline-section">
+      <div class="blob blob-gold" data-depth="0.25"></div>
+      <div class="cloud cloud-4"></div>
+
+      <div class="section-inner wide" data-reveal-section>
+        <p class="eyebrow">a walk through it</p>
+        <h2 class="section-title">Memories, in no particular hurry.</h2>
+
+        <div class="timeline">
+
+          <article class="memory-card" data-reveal data-tilt>
+            <div class="memory-photo placeholder-photo">
+              <img src="assets/memory1.jpg" alt="Rosa Pizza" onerror="this.parentElement.classList.add('img-missing')">
+              <span class="photo-fallback">🍕</span>
+            </div>
+            <div class="memory-text">
+              <span class="memory-icon">🍕</span>
+              <h3>Rosa Pizza</h3>
+              <p>The place where it all began.</p>
+            </div>
+          </article>
+
+          <article class="memory-card" data-reveal data-tilt>
+            <div class="memory-photo placeholder-photo">
+              <img src="assets/memory2.jpg" alt="The first day we met" onerror="this.parentElement.classList.add('img-missing')">
+              <span class="photo-fallback">🎮</span>
+            </div>
+            <div class="memory-text">
+              <span class="memory-icon">🎮</span>
+              <h3>The first day we met</h3>
+              <p>Neither of us knew it would turn into all of this.</p>
+            </div>
+          </article>
+
+          <article class="memory-card" data-reveal data-tilt>
+            <div class="memory-photo placeholder-photo">
+              <img src="assets/lilies.png" alt="Lilies" onerror="this.parentElement.classList.add('img-missing')">
+              <span class="photo-fallback">🪷</span>
+            </div>
+            <div class="memory-text">
+              <span class="memory-icon">🪷</span>
+              <h3>Lilies</h3>
+              <p>Your favourite, apparently. Consider this whole page a bouquet.</p>
+            </div>
+          </article>
+
+          <article class="memory-card" data-reveal data-tilt>
+            <div class="memory-photo placeholder-photo">
+              <img src="assets/memory3.jpg" alt="Chocolate chip cookies" onerror="this.parentElement.classList.add('img-missing')">
+              <span class="photo-fallback">🍪</span>
+            </div>
+            <div class="memory-text">
+              <span class="memory-icon">🍪</span>
+              <h3>Chocolate chip cookies</h3>
+              <p>Gone before anyone else got a fair shot at them.</p>
+            </div>
+          </article>
+
+          <article class="memory-card" data-reveal data-tilt>
+            <div class="memory-photo placeholder-photo">
+              <img src="assets/flower.png" alt="Five replacements" onerror="this.parentElement.classList.add('img-missing')">
+              <span class="photo-fallback">😂</span>
+            </div>
+            <div class="memory-text">
+              <span class="memory-icon">😂</span>
+              <h3>Five replacements</h3>
+              <p>An inside joke that still doesn't need explaining.</p>
+            </div>
+          </article>
+
+          <article class="memory-card" data-reveal data-tilt>
+            <div class="memory-photo placeholder-photo">
+              <img src="assets/memory4.jpg" alt="Edinburgh" onerror="this.parentElement.classList.add('img-missing')">
+              <span class="photo-fallback">🏰</span>
+            </div>
+            <div class="memory-text">
+              <span class="memory-icon">🏰</span>
+              <h3>Edinburgh</h3>
+              <p>A city, a story, a place that's now tied to you a little.</p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LITTLE THINGS SECTION ============ -->
+    <section id="little-things" class="screen little-things-section">
+      <div class="blob blob-pink" data-depth="0.18"></div>
+      <div class="cloud cloud-2"></div>
+
+      <div class="section-inner" data-reveal-section>
+        <p class="eyebrow">the small stuff</p>
+        <h2 class="section-title">Little Things I'll Remember</h2>
+
+        <div class="little-grid">
+          <div class="little-card" data-reveal data-tilt>
+            <span class="little-icon">🍪</span>
+            <p class="little-caption">"The cookies disappeared before I could get one."</p>
+          </div>
+          <div class="little-card" data-reveal data-tilt>
+            <span class="little-icon">🎹</span>
+            <p class="little-caption">"You wanted to hear me play."</p>
+          </div>
+          <div class="little-card" data-reveal data-tilt>
+            <span class="little-icon">🇮🇩</span>
+            <p class="little-caption">"Indonesia."</p>
+          </div>
+          <div class="little-card" data-reveal data-tilt>
+            <span class="little-icon">🪷</span>
+            <p class="little-caption">"Lilies."</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FINAL BIRTHDAY SECTION ============ -->
+    <section id="birthday" class="screen birthday-section">
+      <div class="blob blob-gold" data-depth="0.2"></div>
+      <div class="blob blob-blush" data-depth="0.35"></div>
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-5"></div>
+
+      <div class="section-inner birthday-inner" data-reveal-section>
+        <span class="birthday-tulip">🌷</span>
+        <h2 class="birthday-title">Happy Birthday, Sya <span class="tint">🤍</span></h2>
+        <p class="birthday-note">I hope this little website made you smile.</p>
+        <p class="birthday-signoff">— made with a bit of piano and a lot of memories</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Lightbox for viewing memory photos larger -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    <p class="lightbox-caption" id="lightboxCaption"></p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
